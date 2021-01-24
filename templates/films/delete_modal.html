@@ -1,0 +1,29 @@
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#removeModal">
+  Удалить
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="removeModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Подтвердите действие</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>Вы уверены?</p>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="window.location.href='{{ url_for('remove_film', film_id=film.id) }}'">Да</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Нет</button>
+      </div>
+
+    </div>
+  </div>
+</div>

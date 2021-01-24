@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        <p><label>Название фильма:</label><input type="text" class="form-control" name="name" required
+                                                 value="{{ context.film.name }}"></p>
+        <p><label>Жанр(ы):</label>
+        <select class="selectpicker" multiple name="genres" title="Выберите жанр..." required>
+          {% for genre in context.genres %}
+            <option value="{{ genre.id }}" {% if genre in context.film.genres_collection %} selected
+            {% endif %}>{{ genre.name }}</option>
+            {% endfor %}
+        </select></p>
+        <p><label>Год выхода:</label>
+            <input type="number" class="form-control" min="1895" name="year" required value="{{ context.film.year }}"></p>
+        <p><label>Страна:</label><input type="text" class="form-control" name="country" required
+                                        value="{{ context.film.country }}"></p>
+        <p><label>Режисер:</label><input type="text" class="form-control" name="director" required
+                                         value="{{ context.film.director }}"></p>
+        <p><label>Сценарист:</label><input type="text" class="form-control" name="screenwriter" required
+                                           value="{{ context.film.screenwriter }}"></p>
+        <p><label>Актерский состав:</label><input type="text" class="form-control" name="actors" required
+                                                  value="{{ context.film.actors }}"></p>
+        <p><label>Продолжительность(мин):</label>
+            <input type="number" class="form-control" min="1" name="length" required value="{{ context.film.length }}"></p>
+        {% if 'new' in request.url %}
+            <p><label>Постер:</label><input type="file" accept="image/png,image/jpeg,image/bmp" class="form-control-file"
+                                            name="poster" required></p>
+        {% endif %}
+        <textarea name="description" >{{ context.film.description }}</textarea>
+        <script>
+        var easyMDE = new EasyMDE();
+        </script>
+
+        <button type="submit" class="btn btn-success">Сохранить</button>
+    </form>
+{% endblock %}

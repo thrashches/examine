@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="post">
+    <label>Оценка:</label>
+    <select class="form-control" name="score">
+        <option value="5">Отлично</option>
+        <option value="4">Хорошо</option>
+        <option value="3">Удовлетворительно</option>
+        <option value="2">Неудовлетворительно</option>
+        <option value="1">Плохо</option>
+        <option value="0">Ужасно</option>
+    </select>
+    <label>Текст рецензии:</label>
+    <textarea name="text"></textarea>
+        <script>
+        var easyMDE = new EasyMDE();
+        </script>
+
+    <button type="submit" class="btn btn-success">Сохранить рецензию</button>
+    </form>
+{% endblock %}

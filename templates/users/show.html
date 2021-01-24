@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="my-5">Просмотр данных пользователя</h1>
+
+<table class="table mt-3">
+
+    <tbody>
+        <tr>
+            <td>Логин</td>
+            <td>{{ user.login }}</td>
+        </tr>
+
+        </tr>
+
+        <tr>
+            <td>Фамилия</td>
+            <td>{{ user.last_name }}</td>
+        </tr>
+
+        <tr>
+            <td>Имя</td>
+            <td>{{ user.first_name }}</td>
+        </tr>
+        
+        <tr>
+            <td>Отчество</td>
+            <td>{{ user.middle_name or '' }}</td>
+        </tr>
+
+        <tr>
+            <td>Роль</td>
+            <td>{{ role.name }}</td>
+        </tr>
+    </tbody>
+
+</table>
+
+{% endblock %}

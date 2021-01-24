@@ -1,0 +1,59 @@
+{% macro render_user_form(url, roles, user={}) %}
+<form action="{{ url }}" method="POST">
+
+    <div class="form-group row">
+        <label for="login" class="col-form-label col-md-2">Логин</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="login" id="login" value="{{ user.login or '' }}">
+        </div>
+    </div>
+    {% if request.endpoint == 'new' %}
+    <div class="form-group row">
+        <label for="password" class="col-form-label col-md-2">Пароль</label>
+        <div class="col-md-6">
+            <input class="form-control" type="password" name="password" id="password" value="{{ user.password or '' }}">
+        </div>
+    </div>
+    {% endif %}
+    <div class="form-group row">
+        <label for="last_name" class="col-form-label col-md-2">Фамилия</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="last_name" id="last_name" value="{{ user.last_name or '' }}">
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label for="first_name" class="col-form-label col-md-2">Имя</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="first_name" id="first_name" value="{{ user.first_name or '' }}">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="middle_name" class="col-form-label col-md-2">Отчество</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="middle_name" id="middle_name" value="{{ user.middle_name or '' }}">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="role_id" class="col-form-label col-md-2">Роль</label>
+        <div class="col-md-6">
+            <select name="role_id" id="role_id" class="form-control">
+                <option value="" {% if user.role_id is none %}selected{% endif %}>Гость</option>
+                {% for role in roles %}
+                    <option value="{{ role.id }}" {% if role.id == user.role_id %}selected{% endif %}>
+                        {{ role.name }}
+                    </option>
+                {% endfor %}
+            </select>  
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <input type="submit" class="btn btn-primary" value="Сохранить">
+    </div>
+
+</form>
+{% endmacro %}

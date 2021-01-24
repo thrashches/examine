@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form method="get">
+    <div class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Поиск по фильмам..." name="name" value="{{ context.search_request.name }}">
+  <div class="input-group-append">
+    <button class="btn btn-success" type="submit">Найти</button>
+  </div>
+</div>
+    <p><label>Жанр(ы):</label>
+        <select class="selectpicker" multiple name="genres" title="Выберите жанр...">
+          {% for genre in context.genres %}
+            <option value="{{ genre.id }}" {% if genre.id in context.search_request.genres %} selected{% endif %}>{{ genre.name }}</option>
+            {% endfor %}
+        </select></p>
+    <p><label>Год выхода:</label>
+        <select class="selectpicker" multiple name="year" title="Выберите год...">
+            {% for year in context.years %}
+            <option value="{{ year }}" {% if year in context.search_request.year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select></p>
+        <p><label>Страна:</label><input type="text" class="form-control" name="country" value="{{ context.search_request.country }}"></p>
+    <p><label>Продолжительность от(мин):</label>
+            <input type="number" class="form-control" min="1" name="length_from" value="{{ context.search_request.length_from }}">
+        <label>Продолжительность до(мин):</label>
+            <input type="number" class="form-control" min="1" name="length_to" value="{{ context.search_request.length_to }}">
+    </p>
+    </form>
+
+    <table class="table">
+    <thead>
+        <tr>
+
+             <th>Название фильма</th>
+             <th>Жанр(ы)</th>
+             <th>Год производства</th>
+             <th>Количество рецензий</th>
+             <th></th>
+        </tr>
+    </thead>
+    <tbody>
+{% for film in page_obj.page_obj %}
+            <tr>
+                <td>{{ film.name }}</td>
+                <td>{% for genre in film.genres_collection %}
+                    {{ genre.name }} {% endfor %}
+                    </td>
+                <td>{{ film.year }}</td>
+                <td>{{ film.reviews_collection.__len__() }}</td>
+                <td>
+                    <button class="btn btn-info" onclick="window.location.href='{{ url_for('view_film', film_id=film.id) }}'">О фильме</button>
+                    {% if current_user.is_authenticated %}
+                    {% if user.role_id == 1 or 2 %}
+                    <button class="btn btn-primary" onclick="window.location.href='{{ url_for('edit_film', film_id=film.id) }}'">Изменить</button>
+                    {% endif %}
+                    {% if user.role_id == 1 %}
+                        {% include 'films/delete_modal.html' %}
+                    {% endif %}
+                    {% endif %}
+                </td>
+
+            </tr>
+{% endfor %}
+    </tbody>
+</table>
+    {% if current_user.is_authenticated %}
+        {% if user.role_id == 1 %}
+            <button class="btn btn-success" onclick="window.location.href='{{ url_for('new_film') }}'">Добавить фильм</button>
+            {% endif %}
+    {% endif %}
+    <hr>
+    <label>Количество страниц: {{ page_obj.page_count }}</label>
+    <p>
+        {% if page_obj.has_prev %}
+            <a  {% if '?' in request.full_path %}
+                    {% if 'page' in request.full_path %}
+                        {% set l = request.full_path.split('&page=') %}
+                        href="{{ l[0] }}&page={{ page - 1 }}"
+                    {% else %}
+                        href="{{ request.full_path }}&page={{ page - 1 }}"
+                    {% endif %}
+                {% else %}
+                    href="?page={{ page - 1 }}"
+                {% endif %}
+                class="btn btn-primary btn-sm"><< Назад</a>
+        {% endif %}
+        {{ page }}
+        {% if page_obj.has_next %}
+            <a {% if '?' in request.full_path %}
+                    {% if 'page' in request.full_path %}
+                        {% set l = request.full_path.split('&page=') %}
+                        href="{{ l[0] }}&page={{ page + 1 }}"
+                    {% else %}
+                        href="{{ request.full_path }}&page={{ page + 1 }}"
+                    {% endif %}
+               {% else %}
+                    href="?page={{ page + 1 }}"
+               {% endif %}
+               class="btn btn-primary btn-sm">Вперед >></a> </p>
+        {% endif %}
+{% endblock %}

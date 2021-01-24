@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ film.name }}</h1>
+    <img src="{{ url_for('posters', filename=poster.file_name) }}" style="max-width: 150px;">
+    <label>Жанр: {% for genre in film.genres_collection %}
+                    {{ genre.name }}
+                    {% endfor %}
+    </label>
+    <label>Год: {{ film.year }}</label>
+    <label>Страна: {{ film.country }}</label>
+    <label>Режиссер: {{ film.director }}</label>
+    <label>Сценарист: {{ film.screenwriter }}</label>
+    <label>Актеры: {{ film.actors }}</label>
+    <label>Продолжительность: {{ film.length }} минут</label>
+    <p><label>Описание:</label></p>
+    <p> {{ film.description }} </p>
+
+    {% if user_review %}
+        <hr>
+        <b> <label>Ваш отзыв о фильме: </label>
+    <label>Оценка: {{ user_review.score }}</label>
+       <label>Дата написания: {{ user_review.created_at }}</label></b>
+    <p>
+        {{ user_review.text }}
+    </p>
+        <hr>
+    {% else %}
+
+    <button class="btn btn-success" onclick="window.location.href='{{ url_for('add_review', film_id=film.id) }}'">Оставить отзыв</button>
+    {% endif %}
+    {% if other_reviews %}
+        {% for r in other_reviews %}
+    <hr>
+   <b> <label>Автор: {{ r.users.first_name }} {{ r.users.last_name }}</label>
+    <label>Оценка: {{ r.score }}</label>
+       <label>Дата написания: {{ r.created_at }}</label> </b>
+        <p>
+        {{ r.text }}
+        </p>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
